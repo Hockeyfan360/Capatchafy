@@ -1,0 +1,33 @@
+#This is the main configuration file for Capatchafy 1.0, a plugin by James Depp.
+#Authorized-IPs are located in ips.yml. If you want to wipe them, delete ips.yml, WHILE THE SERVER IS STOPPED. It will reverse your actions if the server is alive.
+
+#If you would like Capatchafy to be enabled all the time, you can specify that here.
+always-on: false
+
+#This is the default security level. This value should be an integer between 1 and 3.
+#Any security level can be selected with the /capatchafy command.
+#1 - Friendly. One time verification, ips will be stored in config.
+#2 - Moderate (Recommended). You must verify each time the server restarts/reloads.
+#3 - Strict. You must verify each time you join.
+security-level: 2
+
+#Hostname - The ip that you want Capatchafy to listen on goes here.
+#You don't HAVE to change this, but leaving it will cause problems when a player tries to find the link to the capatcha.
+hostname: 127.0.0.1
+
+#Port - The port that you want Capatchafy to run on goes here.
+#Use port 80 if you don't want your players to have to type a port in the address bar. On some machines, port 80 may already be in use.
+#If you're not sure about which port to use, just pick a random one. If you're running a VPS, be sure to open the port in the firewall.
+port: 8080
+
+#Whitelisted IPs - IPs that will never have to go through the capatcha verification process.
+whitelisted-ips:
+  - 127.0.0.1
+
+#This is the tricky part. You will need to obtain api keys for reCapatcha.
+
+#To obtain a reCapatcha key, click on https://www.google.com/recaptcha/intro/index.html and click "Get Started."
+#Enter in a name for your 'site', it can be anything. Then, give the hostname you put here as the url to your capatcha.
+#Your site key goes in the 'recapatcha-key' section, your secret key (which you should never give out) goes in the 'recapatcha-secret' section.
+recapatcha-key:
+recapatcha-secret:
