@@ -69,6 +69,7 @@ public class Capatchafy extends JavaPlugin
         }
         enabled = configs.config.getBoolean("always-on");
         server = HttpdServer.startServer();
+        listeners.setURLMessage();
         Bukkit.getLogger().info("[Capatchafy] Running in security level " + securityLevel + ".");
     }
     

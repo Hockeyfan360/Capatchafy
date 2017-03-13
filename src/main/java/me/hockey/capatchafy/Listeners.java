@@ -37,6 +37,8 @@ public class Listeners implements Listener
     public long removeAllPointsTime = 10L; //Remove all points after x seconds.
     public int maxAttacks = 3; //Set to 0 to disable this function.
     
+    public static String url;
+    
     //TODO If IP matches IP in TFM, dont force admins to verify.
     @EventHandler
     public void onPlayerLogin(PlayerPreLoginEvent event)
@@ -50,7 +52,7 @@ public class Listeners implements Listener
         if (!Capatchafy.configs.isAuthorized(ip))
         {
             event.disallow(PlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.RED + "" + ChatColor.BOLD + "Yikes, we're under attack! Please solve the capatcha.\n" +
-                    ChatColor.WHITE + "Please go to " + ChatColor.GOLD + HttpdServer.BASE_URI.replaceAll(":80", "") + "capatcha/" + ChatColor.WHITE + " and solve the capatcha.\n" +
+                    ChatColor.WHITE + "Please go to " + ChatColor.GOLD + url + ChatColor.WHITE + " and solve the capatcha.\n" +
                     "Once solved successfully, you will be able to join.");
             return;
         }
@@ -94,5 +96,15 @@ public class Listeners implements Listener
             Capatchafy.enabled = false;
         }
         lastLogin = currentTime;
+    }
+    
+    public void setURLMessage()
+    {
+        if (Capatchafy.configs.getPort().equals("80"))
+        {
+            url = Capatchafy.configs.getHostname() + "/capatcha";
+            return;
+        }
+        url = Capatchafy.configs.getHostname() + ":" + Capatchafy.configs.getPort() + "/capatcha";
     }
 }
