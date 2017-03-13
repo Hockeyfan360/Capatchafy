@@ -42,6 +42,7 @@ public class Capatchafy extends JavaPlugin
         plugin = this;
         configs = new Configuration();
         listeners = new Listeners();
+        listeners.setThrottleSettings();
         Bukkit.getPluginManager().registerEvents(listeners, this);
         getCommand("capatchafy").setExecutor(new CapatchafyCommand());
         try

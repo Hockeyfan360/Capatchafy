@@ -16,14 +16,13 @@
 */
 package me.hockey.capatchafy;
 
-import me.hockey.capatchafy.httpd.HttpdServer;
-import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPreLoginEvent;
 
 import java.util.Date;
 import org.bukkit.ChatColor;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class Listeners implements Listener
 {
@@ -32,10 +31,16 @@ public class Listeners implements Listener
     public Date lastLogin;
     public int numberOfAttacks; //This is the number of attacks since admin intervention, not necessarily the number of attacks since the server has been online.
 
-    public long throttleTime = 1L; //The higher, the more often players will be counted as possible spammers. Change to .1 .
-    public int throttleLogins = 3; //The lower, the quicker the capatchas will auto-enable. Change to 5.
-    public long removeAllPointsTime = 10L; //Remove all points after x seconds.
+    public long throttleTime; //The higher, the more often players will be counted as possible spammers. Required time between each login to not be considered an attack.
+    public int throttleLogins; //The lower, the quicker the capatchas will auto-enable. Aka max points before capatchafy is enabled.
+    public long removeAllPointsTime = 7L; //Remove all points after x seconds.
     public int maxAttacks = 3; //Set to 0 to disable this function.
+    
+    public long startupThrottleTime = 1L; //The throttle time on startup. 1
+    public int startupThrottleLogins = 20; //The throttle logins on startup. 20
+    
+    public long defaultThrottleTime = 3L; //After 30 seconds, the server defaults back to this. 3
+    public int defaultThrottleLogins = 8; //9
     
     public static String url;
     
@@ -52,7 +57,7 @@ public class Listeners implements Listener
         if (!Capatchafy.configs.isAuthorized(ip))
         {
             event.disallow(PlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.RED + "" + ChatColor.BOLD + "Yikes, we're under attack! Please solve the capatcha.\n" +
-                    ChatColor.WHITE + "Please go to " + ChatColor.GOLD + url + ChatColor.WHITE + " and solve the capatcha.\n" +
+                    ChatColor.WHITE + "Please go to " + ChatColor.GOLD + url + ChatColor.WHITE + " in your web browser and solve the capatcha.\n" +
                     "Once solved successfully, you will be able to join.");
             return;
         }
@@ -78,22 +83,25 @@ public class Listeners implements Listener
             points++;
         }
 
+        if (diffInSeconds >= removeAllPointsTime && !Capatchafy.forced)
+        {
+            points = 0;
+            //Bukkit.broadcastMessage("[Capatchafy] Disabled");
+            Capatchafy.enabled = false;
+        }       
         if (points == throttleLogins && !Capatchafy.enabled)
         {
+            //Bukkit.broadcastMessage("[Capatchafy] Enabled");
             Capatchafy.enabled = true;
-            numberOfAttacks++;
+            numberOfAttacks++;         
         }
         if (numberOfAttacks >= maxAttacks && maxAttacks != 0)
         {
+            //Bukkit.broadcastMessage("[Capatchafy] Enabled for good.");
             Capatchafy.enabled = true;
             Capatchafy.forced = true;
             lastLogin = currentTime;
             return;
-        }
-        if (diffInSeconds >= removeAllPointsTime)
-        {
-            points = 0;
-            Capatchafy.enabled = false;
         }
         lastLogin = currentTime;
     }
@@ -102,9 +110,26 @@ public class Listeners implements Listener
     {
         if (Capatchafy.configs.getPort().equals("80"))
         {
-            url = Capatchafy.configs.getHostname() + "/capatcha";
+            url = Capatchafy.configs.getHostname();
             return;
         }
-        url = Capatchafy.configs.getHostname() + ":" + Capatchafy.configs.getPort() + "/capatcha";
+        url = Capatchafy.configs.getHostname() + ":" + Capatchafy.configs.getPort();
+    }
+    
+    public void setThrottleSettings()
+    {
+        this.throttleTime = startupThrottleTime;
+        this.throttleLogins = startupThrottleLogins;
+        //Bukkit.getLogger().info("[Capatchafy] Delay started. " + throttleTime + " " + throttleLogins);
+        new BukkitRunnable() 
+        {
+            @Override
+            public void run() 
+            {
+                throttleTime = defaultThrottleTime;
+                throttleLogins = defaultThrottleLogins;
+                //Bukkit.broadcastMessage("[Capatchafy] Delay ended: " + throttleTime + " " + throttleLogins);
+            }           
+        }.runTaskLater(Capatchafy.plugin, 1200);
     }
 }
