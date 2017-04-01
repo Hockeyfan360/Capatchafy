@@ -38,7 +38,7 @@ Installation is fairly straight-forward. Drag Capatchafy to your plugins folder 
 ---
 
 ### Compiling
-Capatchafy makes use of Maven, so it should compile automatically. You shouldn't need to add any dependencies or make edits to the POM. However, you MUST use the jar labeled Capatchafy-jar-with-dependencies. If you don't, you will get NoClassDefFound errors. If you have any problems, open an issue.
+Capatchafy makes use of Maven, so it should compile automatically. If you are using Intellij or Eclipse, you might need to run 'mvn package' in the command line to build the project. Netbeans does this for you. You shouldn't need to add any dependencies or make edits to the POM. However, you MUST use the jar labeled Capatchafy-jar-with-dependencies. If you don't, you will get NoClassDefFound errors. If you have any problems, open an issue.
 
 ### License
 Capatchafy is licensed under the GNU General Public License v3.0. You can find a copy of it in the License.txt file. 
