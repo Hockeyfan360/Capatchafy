@@ -33,7 +33,7 @@ You will need to assign the permission 'capatchafy.command' to anyone who needs 
 You can also whitelist IPs in the config. These IPs will never have to solve a capatcha.
 
 ### How do I install Capatchafy?
-Installation is fairly straight-forward. Drag Capatchafy to your plugins folder like any other add-on, and start your server. This will allow Capatchafy to generate the necessary config files. Then, edit the config as you please. You will need to obtain a reCapatcha key from Google. You can do that here: https://www.google.com/recaptcha/. Place the keys in the config file, and you're ready to go!
+Installation is fairly straight-forward. Drag Capatchafy to your plugins folder like any other add-on, and start your server. This will allow Capatchafy to generate the necessary config files. Then, edit the config as you please. You will need to obtain a reCapatcha key from Google. You can do that here: https://www.google.com/recaptcha/. Place the keys in the config file, and you're ready to go! Be sure to open a port up in your firewall, as well as port forward if you are creating a server on a home connection.
 
 ---
 
