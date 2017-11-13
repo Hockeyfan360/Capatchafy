@@ -79,6 +79,7 @@ public class CapatchafyCommand implements CommandExecutor
             else if (args[1].equalsIgnoreCase("strict") || args[1].equalsIgnoreCase("3"))
             {
                 Capatchafy.securityLevel = 3;
+                Capatchafy.configs.ipList.clear();
             }
             else
             {

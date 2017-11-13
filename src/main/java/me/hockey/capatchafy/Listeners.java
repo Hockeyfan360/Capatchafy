@@ -36,11 +36,11 @@ public class Listeners implements Listener
     public long removeAllPointsTime = 7L; //Remove all points after x seconds.
     public int maxAttacks = 3; //Set to 0 to disable this function.
     
-    public long startupThrottleTime = 1L; //The throttle time on startup. 1
-    public int startupThrottleLogins = 20; //The throttle logins on startup. 20
+    public long startupThrottleTime = 1L; //The throttle time on startup. Default: 1
+    public int startupThrottleLogins = 20; //The throttle logins on startup. Default: 20
     
-    public long defaultThrottleTime = 3L; //After 30 seconds, the server defaults back to this. 3
-    public int defaultThrottleLogins = 8; //9
+    public long defaultThrottleTime = 3L; //After 30 seconds, the server defaults back to this. Default: 3
+    public int defaultThrottleLogins = 8; //Default: 9
     
     public static String url;
     

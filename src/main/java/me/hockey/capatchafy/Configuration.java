@@ -100,16 +100,16 @@ public class Configuration
         {
             case 1:
             {
-                ipList.add(ip);
+                if (!ipList.contains(ip)) ipList.add(ip);
                 alwaysAuthorizedList.add(ip);
             }
             case 2:
             {
-                ipList.add(ip);
+                if (!ipList.contains(ip)) ipList.add(ip);
             }
             case 3:
             {
-                ipList.add(ip);
+                if (!ipList.contains(ip)) ipList.add(ip);
             }
         }
     }
