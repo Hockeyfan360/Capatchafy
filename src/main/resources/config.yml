@@ -29,5 +29,5 @@ whitelisted-ips:
 #To obtain a reCapatcha key, click on https://www.google.com/recaptcha/intro/index.html and click "Get Started."
 #Enter in a name for your 'site', it can be anything. Then, give the hostname you put here as the url to your capatcha.
 #Your site key goes in the 'recapatcha-key' section, your secret key (which you should never give out) goes in the 'recapatcha-secret' section.
-recapatcha-key:
-recapatcha-secret:
+recapatcha-key: []
+recapatcha-secret: []

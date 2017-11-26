@@ -21,54 +21,41 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.glassfish.grizzly.http.server.HttpServer;
 
-import java.io.IOException;
-
 public class Capatchafy extends JavaPlugin
 {
     public static Capatchafy plugin;
     public static Listeners listeners;
-
-    public static Configuration configs;
+    public static Configuration configuration;
+    
     public static boolean enabled = false;
     public static boolean forced = false; //Disallows auto-enabling/disabling of capatchafy.
     public static int securityLevel;
-    public HttpServer server;
     
+    public HttpServer server;
     public static boolean error = false;
     
     @Override
     public void onEnable()
     {
         plugin = this;
-        configs = new Configuration();
-        listeners = new Listeners();
+        listeners = new Listeners(plugin);
+        configuration = new Configuration(plugin);
+        
         listeners.setThrottleSettings();
-        Bukkit.getPluginManager().registerEvents(listeners, this);
-        getCommand("capatchafy").setExecutor(new CapatchafyCommand());
-        try
-        {
-            configs = new Configuration();
-            configs.startup();
-            if (configs.isIncomplete())
-            {
-                Bukkit.getLogger().severe("[Capatchafy] There is information missing in the config. Please make the appropriate changes. " +
-                    "This is normal on the first run. Reload the server once you have made the correct edits.");
-                Capatchafy.error = true;
-                Bukkit.getPluginManager().disablePlugin(Capatchafy.plugin);
-                return;
-            }
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        securityLevel = configs.config.getInt("security-level");
-        if (securityLevel > 3 || securityLevel < 1)
+        plugin.getServer().getPluginManager().registerEvents(listeners, this);
+        plugin.getCommand("capatchafy").setExecutor(new CapatchafyCommand());
+        
+        configuration.generateConfigs();
+        configuration.loadConfigs();
+        
+        securityLevel = configuration.mainConfig.getInt("security-level");
+        if(securityLevel > 3 || securityLevel < 1)
         {
             securityLevel = 2;
             Bukkit.getLogger().severe("[Capatchafy] The 'security-level' config field was not between 1 and 3. Setting security level to 2.");
         }
-        enabled = configs.config.getBoolean("always-on");
+        
+        enabled = configuration.mainConfig.getBoolean("always-on");
         server = HttpdServer.startServer();
         listeners.setURLMessage();
         Bukkit.getLogger().info("[Capatchafy] Running in security level " + securityLevel + ".");
@@ -77,21 +64,8 @@ public class Capatchafy extends JavaPlugin
     @Override
     public void onDisable()
     {
-        if (error)
-        {
-            return; //Prevents errors on the first startup.
-        }
-        
-        try
-        {
-            configs.saveNames(true);
-            configs.saveConfig();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        server.stop();
-        configs.ipList.clear(); //TODO See if removing this line affects functionality.
+        configuration.saveIps();
+        configuration.ipList.clear();
+        server.shutdownNow();
     }
 }

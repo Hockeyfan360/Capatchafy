@@ -16,14 +16,18 @@
 */
 package me.hockey.capatchafy.httpd;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import me.hockey.capatchafy.Capatchafy;
 import org.bukkit.Bukkit;
 import org.glassfish.grizzly.http.server.Request;
-
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
@@ -33,24 +37,24 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 
 @Path("/")
-public class CapatchaPage 
+public class CapatchaPage
 {
     @GET
     @Produces(MediaType.TEXT_HTML)
     public String urlAccessed(@Context Request req)
     {
-        if (Capatchafy.configs.isAuthorized(req.getRemoteAddr()) || !Capatchafy.enabled)
+        if(Capatchafy.configuration.isAuthorized(req.getRemoteAddr()) || !Capatchafy.enabled)
         {
             return "You are already authorized.";
         }
-        return  "<head>" +
-                "<script src='https://www.google.com/recaptcha/api.js'></script></head>" +
-                "<script>function callback(){document.getElementById(\"form\").submit();}</script>"+
-                "<form id=\"form\"method=\"post\">" +
-                "<div class=\"g-recaptcha\" data-callback=\"callback\" data-sitekey=\"" + Capatchafy.configs.getCapatchaSiteKey() + "\"></div>" +
-                "</form>";
+        return "<head>" +
+               "<script src='https://www.google.com/recaptcha/api.js'></script></head>" +
+               "<script>function callback(){document.getElementById(\"form\").submit();}</script>" +
+               "<form id=\"form\"method=\"post\">" +
+               "<div class=\"g-recaptcha\" data-callback=\"callback\" data-sitekey=\"" + Capatchafy.configuration.getCapatchaSiteKey() + "\"></div>" +
+               "</form>";
     }
-
+    
     @POST
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     public void handlePost(@FormParam("g-recaptcha-response") String content, @Context Request req)
@@ -58,51 +62,51 @@ public class CapatchaPage
         try
         {
             //Bukkit.getLogger().info("A capatcha has been recieved from " + req.getRemoteAddr());
-            if (validateCaptcha(Capatchafy.configs.getCapatchaSecret(), content, req.getRemoteAddr()))
+            if(validateCaptcha(Capatchafy.configuration.getCapatchaSecret(), content, req.getRemoteAddr()))
             {
                 //Bukkit.getLogger().info("Capatcha from " + req.getRemoteAddr() + " is valid.");
-                Capatchafy.configs.setAuthorized(req.getRemoteAddr(), true);
+                Capatchafy.configuration.setAuthorized(req.getRemoteAddr(), true);
             }
         }
-        catch (Exception e)
+        catch(Exception e)
         {
             System.out.print(e.getLocalizedMessage());
         }
     }
-
+    
     public boolean validateCaptcha(String secret, String response, String remoteip)
     {
         JsonObject jsonObject = null;
-        URLConnection connection = null;
+        URLConnection connection;
         InputStream is = null;
         String charset = java.nio.charset.StandardCharsets.UTF_8.name();
-
+        
         String url = "https://www.google.com/recaptcha/api/siteverify";
-        try 
+        try
         {
             String query = String.format("secret=%s&response=%s&remoteip=%s",
-                    URLEncoder.encode(secret, charset),
-                    URLEncoder.encode(response, charset),
-                    URLEncoder.encode(remoteip, charset));
-
+                                         URLEncoder.encode(secret, charset),
+                                         URLEncoder.encode(response, charset),
+                                         URLEncoder.encode(remoteip, charset));
+            
             connection = new URL(url + "?" + query).openConnection();
             is = connection.getInputStream();
             JsonReader rdr = Json.createReader(is);
             jsonObject = rdr.readObject();
-        } 
-        catch (IOException ex) 
-        {
-            Bukkit.broadcastMessage(ex.getStackTrace().toString());
         }
-        finally 
+        catch(IOException ex)
         {
-            if (is != null) 
+            Bukkit.broadcastMessage(ex.getMessage());
+        }
+        finally
+        {
+            if(is != null)
             {
-                try 
+                try
                 {
                     is.close();
-                } 
-                catch (IOException e)
+                }
+                catch(IOException e)
                 {
                     System.out.print(e.getLocalizedMessage());
                 }
@@ -111,4 +115,3 @@ public class CapatchaPage
         return jsonObject.getBoolean("success");
     }
 }
-

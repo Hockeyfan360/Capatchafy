@@ -19,7 +19,6 @@ package me.hockey.capatchafy.httpd;
 import java.net.URI;
 import java.util.HashSet;
 import java.util.Set;
-
 import me.hockey.capatchafy.Capatchafy;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -27,11 +26,12 @@ import org.glassfish.jersey.server.ResourceConfig;
 
 public class HttpdServer
 {
-    public static final String BASE_URI = "http://" + Capatchafy.configs.getHostname() + ":" + Capatchafy.configs.getPort() + "/";
-    public static HttpServer startServer() 
+    public static final String BASE_URI = "http://" + Capatchafy.configuration.getHostname() + ":" + Capatchafy.configuration.getPort() + "/";
+    
+    public static HttpServer startServer()
     {
         final ResourceConfig rc = new ResourceConfig().packages("me.hockey.capatchafy.httpd");
-        final Set<Class<?>> classes = new HashSet<Class<?>>();
+        final Set<Class<?>> classes = new HashSet<>();
         classes.add(CapatchaPage.class);
         rc.registerClasses(classes);
         return GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);

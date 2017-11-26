@@ -1,10 +1,16 @@
 name: Capatchafy
 version: 1.0.1
 main: me.hockey.capatchafy.Capatchafy
+author: Hockeyfan360
 
 commands:
   capatchafy:
-      
-capatchafy.command:
-     description: Allow a player to use the capatchafy command.
-     default: op
+    description: Allow a player to use the capatchafy command.
+    usage: "Usage: /capatchafy <on|off> <friendly | moderate | strict> | [-f]"
+    aliases: [cap]
+    default: op
+
+permissions:
+  capatchafy.command:
+    description: Allows access to the main and only command of the plugin.
+    default: op
