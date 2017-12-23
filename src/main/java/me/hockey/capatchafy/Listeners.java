@@ -58,10 +58,12 @@ public class Listeners implements Listener
         {
             throttleConnections();
         }
+        
         if(!Capatchafy.enabled)
         {
             return;
         }
+        
         String ip = event.getAddress().toString().replaceAll("/", "");
         if(!Capatchafy.configuration.isAuthorized(ip))
         {
@@ -70,6 +72,7 @@ public class Listeners implements Listener
                                                                        "Once solved successfully, you will be able to join.");
             return;
         }
+        
         if(Capatchafy.securityLevel == 3)
         {
             Capatchafy.configuration.setAuthorized(ip, false);
@@ -85,6 +88,7 @@ public class Listeners implements Listener
             lastLogin = new Date();
             return;
         }
+        
         Date currentTime = new Date();
         long diffInSeconds = (currentTime.getTime() - lastLogin.getTime()) / 1000 % 60;
         if(diffInSeconds <= throttleTime && points != throttleLogins) //points != throttleLogins works because it adds a point when the points is not the ammount needed to throttle.
@@ -98,12 +102,14 @@ public class Listeners implements Listener
             //Bukkit.broadcastMessage("[Capatchafy] Disabled");
             Capatchafy.enabled = false;
         }
+        
         if(points == throttleLogins && !Capatchafy.enabled)
         {
             //Bukkit.broadcastMessage("[Capatchafy] Enabled");
             Capatchafy.enabled = true;
             numberOfAttacks++;
         }
+        
         if(numberOfAttacks >= maxAttacks && maxAttacks != 0)
         {
             //Bukkit.broadcastMessage("[Capatchafy] Enabled for good.");
@@ -112,6 +118,7 @@ public class Listeners implements Listener
             lastLogin = currentTime;
             return;
         }
+        
         lastLogin = currentTime;
     }
     
@@ -122,6 +129,7 @@ public class Listeners implements Listener
             url = Capatchafy.configuration.getHostname();
             return;
         }
+        
         url = Capatchafy.configuration.getHostname() + ":" + Capatchafy.configuration.getPort();
     }
     

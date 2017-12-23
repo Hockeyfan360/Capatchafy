@@ -33,11 +33,13 @@ public class CapatchafyCommand implements CommandExecutor
             sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
             return true;
         }
+        
         if(Capatchafy.configuration.mainConfig.getBoolean("always-on"))
         {
             sender.sendMessage(ChatColor.RED + "The server owner has Capatchafy enabled at all times. You are not allowed to turn it off or change the security level.");
             return true;
         }
+        
         switch(args.length)
         {
             case 0:
@@ -107,6 +109,7 @@ public class CapatchafyCommand implements CommandExecutor
                                     Capatchafy.forced = true;
                                     sender.sendMessage(ChatColor.YELLOW + "Capatchafy " + ChatColor.RED + "will not" + ChatColor.YELLOW + " automatically enable if the server detects an attack.");
                                 }
+                                
                                 return true;
                             default:
                                 break;

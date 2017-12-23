@@ -115,6 +115,7 @@ public class Configuration
             return;
             //We dont remove always authorized ips, because they were added while in the friendly mode, so they should still be added to the ips.yml.
         }
+        
         switch(Capatchafy.securityLevel)
         {
             case 1:
@@ -123,6 +124,7 @@ public class Configuration
                 {
                     ipList.add(ip);
                 }
+                
                 alwaysAuthorizedList.add(ip);
             }
             case 2:
@@ -142,6 +144,7 @@ public class Configuration
         {
             return true;
         }
+        
         switch(Capatchafy.securityLevel)
         {
             case 1:
@@ -149,9 +152,6 @@ public class Configuration
                 return alwaysAuthorizedList.contains(ip) || ipConfig.getStringList("authorized-ips").contains(ip);
             }
             case 2:
-            {
-                return ipList.contains(ip);
-            }
             case 3:
             {
                 return ipList.contains(ip);

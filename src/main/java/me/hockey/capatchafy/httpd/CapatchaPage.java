@@ -47,6 +47,7 @@ public class CapatchaPage
         {
             return "You are already authorized.";
         }
+        
         return "<head>" +
                "<script src='https://www.google.com/recaptcha/api.js'></script></head>" +
                "<script>function callback(){document.getElementById(\"form\").submit();}</script>" +
