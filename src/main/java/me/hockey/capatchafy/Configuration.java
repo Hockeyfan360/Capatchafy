@@ -36,7 +36,6 @@ public class Configuration
 
     public void startup() throws IOException
     {
-        //startup()
         saveConfig();
         saveNames(false);
         loadConfigs();
@@ -62,7 +61,6 @@ public class Configuration
         {
             ips.set("authorized-ips", alwaysAuthorizedList);
             ips.save(ipsFile);
-            //Bukkit.broadcastMessage("IP Config Saved(?)");
         }
     }
 
@@ -77,7 +75,6 @@ public class Configuration
         {
             Capatchafy.plugin.saveResource("config.yml", false);
         }
-        //Bukkit.broadcastMessage("Default config saved.");
     }
 
     public void loadConfigs() throws IOException
@@ -85,7 +82,6 @@ public class Configuration
         config = YamlConfiguration.loadConfiguration(configFile);
         ips = YamlConfiguration.loadConfiguration(ipsFile);
         alwaysAuthorizedList = ips.getStringList("authorized-ips");
-        //Bukkit.broadcastMessage("Configs loaded");
     }
 
     public void setAuthorized(String ip, boolean authorize)

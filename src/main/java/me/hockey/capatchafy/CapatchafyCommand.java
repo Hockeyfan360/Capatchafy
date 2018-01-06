@@ -35,20 +35,20 @@ public class CapatchafyCommand implements CommandExecutor
         if (!sender.hasPermission("capatchafy.command"))
         {
             sender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
-            return true;
+            return false;
         }
         
         if (Capatchafy.configs.config.getBoolean("always-on"))
         {
             sender.sendMessage(ChatColor.RED + "The server owner has Capatchafy enabled at all times. You are not allowed to turn it off or change the security level.");
-            return true;
+            return false;
         }
 
         //TODO Fix arguments problem, it will throw errors if the parameters aren't filled out properly. Also, make it show usage when the security level arg is spelled wrong.
         if (args.length < 1)
         {
-            sender.sendMessage("Usage: /capatchafy <on:off> <friendly:moderate:strict>");
-            return true;
+            sender.sendMessage("Usage: /capatchafy <on:off:status> <friendly:moderate:strict>");
+            return false;
         }
 
         if (args[0].equalsIgnoreCase("on"))
@@ -83,9 +83,11 @@ public class CapatchafyCommand implements CommandExecutor
             }
             else
             {
-                sender.sendMessage("Usage: /capatchafy <on:off> <friendly:moderate:strict>");
+                sender.sendMessage("Usage: /capatchafy <on:off:status> <friendly:moderate:strict>");
+                return false;
             }
             sender.sendMessage("Capatchafy will run in security level " + Capatchafy.securityLevel + ". It will not be auto-disabled.");
+            return true;
         }
         else if (args[0].equalsIgnoreCase("off"))
         {
@@ -99,7 +101,18 @@ public class CapatchafyCommand implements CommandExecutor
             {
                 Capatchafy.forced = true;
                 sender.sendMessage(ChatColor.YELLOW + "Capatchafy " + ChatColor.RED + "will not" + ChatColor.YELLOW + " automatically enable if the server detects an attack.");
+                return true;
             }
+        }
+        else if (args[0].equalsIgnoreCase("status"))
+        {
+            sender.sendMessage(ChatColor.GRAY + "Capatchafy is enabled: " + ChatColor.YELLOW + Capatchafy.enabled);
+            sender.sendMessage(ChatColor.GRAY + "Capatchafy is set to run in mode: " + ChatColor.YELLOW + Capatchafy.securityLevel);
+            return true;
+        }
+        else
+        {
+            sender.sendMessage("Usage: /capatchafy <on:off:status> <friendly:moderate:strict>");
         }
         return false;
     }
